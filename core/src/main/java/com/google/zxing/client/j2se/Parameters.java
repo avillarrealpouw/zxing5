@@ -54,8 +54,7 @@ public class Parameters {
     String config_separation_s="";
     String config_test_s="";
     String config_args_s="";
-    try {
-      BufferedReader reader1 = new BufferedReader(new FileReader(parameterName));
+    try (BufferedReader reader1 = new BufferedReader(new FileReader(parameterName))){
       config_width_s = reader1.readLine();
       config_height_s = reader1.readLine();
       config_columns_s = reader1.readLine();
@@ -66,7 +65,7 @@ public class Parameters {
       config_args_s = reader1.readLine();
       reader1.close();
     } catch (IOException e) {
-      e.printStackTrace();
+      System.out.println("error reading parameters");
     }
     try {
       width = Integer.parseInt(config_width_s);
@@ -78,7 +77,7 @@ public class Parameters {
       test = Integer.parseInt(config_test_s)==1;
       inargs = config_args_s;
     } catch (NumberFormatException e) {
-      e.printStackTrace();
+      System.out.println("error interpreting numeric values");
     }
     hints = new EnumMap<>(EncodeHintType.class);
     Dimensions dimensions = new Dimensions(columns, columns, 1, 10000);

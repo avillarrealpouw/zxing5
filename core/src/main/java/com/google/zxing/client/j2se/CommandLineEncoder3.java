@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.google.zxing.client.j2se;
 
 import com.google.zxing.EncodeHintType;
@@ -48,22 +47,23 @@ import java.util.Map;
 
 /**
  * Command line utility for encoding barcodes.
- * 
+ *
  * @author Sean Owen
  */
 public final class CommandLineEncoder3 {
+
   private CommandLineEncoder3() {
   }
 
-  static String readhexfile(String s1)throws FileNotFoundException, IOException {
+  static String readhexfile(String s1) throws FileNotFoundException, IOException {
     System.out.println("hexa filename: " + s1);
     File infilehex = new File(s1);
     int infilehexsz = (int) infilehex.length();
     System.out.println("filesize: " + infilehexsz);
-    if(infilehexsz % 2 == 1){
+    if (infilehexsz % 2 == 1) {
       System.out.println("Error en el archivo hexa");
     }
-    byte [] ba1 = new byte [ infilehexsz ];
+    byte[] ba1 = new byte[infilehexsz];
     FileInputStream instream1 = new FileInputStream(infilehex);
     instream1.read(ba1);
     System.out.println("Size of hexa file: " + infilehexsz);
@@ -102,14 +102,14 @@ public final class CommandLineEncoder3 {
     }
     return strb1.toString();
   }
+
   /**
    * Calculates the necessary number of rows as described in annex Q of ISO/IEC 15438:2001(E).
    *
-   * @param m the number of source codewords prior to the additional of the Symbol Length
-   *          Descriptor and any pad codewords
+   * @param m the number of source codewords prior to the additional of the Symbol Length Descriptor and any pad
+   * codewords
    * @param k the number of error correction codewords
-   * @param c the number of columns in the symbol in the data region (excluding start, stop and
-   *          row indicator codewords)
+   * @param c the number of columns in the symbol in the data region (excluding start, stop and row indicator codewords)
    * @return the number of rows in the symbol (r)
    */
   static int calculateNumberOfRows2(int m, int k, int c) {
@@ -120,22 +120,22 @@ public final class CommandLineEncoder3 {
     return r;
   }
 
-  static void process(String s1,Parameters parms) throws Exception {
-    String config_imageFormat = "BMP";
+  static void process(String s1, Parameters parms) throws Exception {
+    //String config_imageFormat = "BMP";
     BarcodeFormat config_barcodeFormat = BarcodeFormat.PDF_417;
     //String config_errorCorrectionLevel = "1";
 
     int separator = s1.indexOf('|');
-    String config_basefilename = s1.substring(separator+1);
-    String config_infilename = s1.substring(0,separator);
+    String config_basefilename = s1.substring(separator + 1);
+    String config_infilename = s1.substring(0, separator);
     System.out.println("infilename: [" + config_infilename + "], basefilename: [" + config_basefilename + "]");
     String str1 = readhexfile(config_infilename);
-    int width1 = (4*17)*(parms.columns+4)+(2*4)+4;
-    int height1 = (calculateNumberOfRows2(str1.length(),4,parms.columns)+2)*16;
-    System.out.println("MultiFormatWriter called with width: " +width1+ " height: " +height1);
+    int width1 = (4 * 17) * (parms.columns + 4) + (2 * 4) + 4;
+    int height1 = (calculateNumberOfRows2(str1.length(), 4, parms.columns) + 2) * 16;
+    System.out.println("MultiFormatWriter called with width: " + width1 + " height: " + height1);
     BitMatrix matrix = new MultiFormatWriter().encode(str1, config_barcodeFormat, width1, height1, parms.hints);
     String fileString1 = config_basefilename;
-    MatrixToBMP.MatrixToBMP1(matrix,parms,fileString1);
+    MatrixToBMP.MatrixToBMP1(matrix, parms, fileString1);
     //MatrixToImageWriter.writeToPath(matrix, config_imageFormat, Paths.get(fileString1));
     //File file1 = new File(fileString1);
     //byte [] ba = new byte [ (int) file1.length() ];
@@ -151,13 +151,13 @@ public final class CommandLineEncoder3 {
     //  try (FileOutputStream stream3 = new FileOutputStream(file3)) {
     //    stream3.write(ba);
     //  }
-      //File file3 = new File(fileString1);
-      //byte [] ba2 = new byte [ (int) file3.length() ];
-      //try (FileInputStream stream3 = new FileInputStream(file3)) {
-      //  stream3.read(ba2);
-      //} catch (IOException ex) {
-      //  System.out.println("problem reading scaled bmp");
-      //}
+    //File file3 = new File(fileString1);
+    //byte [] ba2 = new byte [ (int) file3.length() ];
+    //try (FileInputStream stream3 = new FileInputStream(file3)) {
+    //  stream3.read(ba2);
+    //} catch (IOException ex) {
+    //  System.out.println("problem reading scaled bmp");
+    //}
     //}
     //outstream.close();
   }
@@ -166,47 +166,47 @@ public final class CommandLineEncoder3 {
     Parameters parms = new Parameters(args);
 
     try {
-      byte [] b1 = new byte [1024];
+      byte[] b1 = new byte[1024];
       ServerSocket ssoc;
       ssoc = new ServerSocket(4379);
       boolean testing = parms.test;
       boolean ends = false;
       String s1;
       while (!ends) {
-        if(!testing){
+        if (!testing) {
           System.out.println("waiting to accept");
           try (Socket soc = ssoc.accept()) {
             System.out.println("waiting for message");
-            InputStream is = soc.getInputStream();
-            OutputStream os = soc.getOutputStream();
-            BufferedOutputStream bos;
-            bos = new BufferedOutputStream(os);
-            int r1 = is.read(b1);
-            StringBuilder sb1 = new StringBuilder(r1);
-            for (int i=0; i<r1; i++){
-              char c1 = (char)b1[i];
-              sb1.append(c1);
+            try (InputStream is = soc.getInputStream()) {
+              OutputStream os = soc.getOutputStream();
+              BufferedOutputStream bos;
+              bos = new BufferedOutputStream(os);
+              int r1 = is.read(b1);
+              StringBuilder sb1 = new StringBuilder(r1);
+              for (int i = 0; i < r1; i++) {
+                char c1 = (char) b1[i];
+                sb1.append(c1);
+              }
+              s1 = sb1.toString();
+              System.out.println("received message: [" + s1 + "] length: " + s1.length());
+              if (!"stop".equals(s1)) {
+                process(s1, parms);
+              }
+              System.out.println("sending response");
+              String s = "server response to: " + s1;
+              byte[] b = s.getBytes();
+              bos.write(b);
+              bos.flush();
+              bos.close();
             }
-            s1 = sb1.toString();
-            System.out.println("received message: [" + s1 + "] length: " + s1.length());
-            if(!"stop".equals(s1)){
-              process(s1,parms);
-            }
-            System.out.println("sending response");
-            String s = "server response to: " + s1;
-            byte[] b = s.getBytes();
-            bos.write(b);
-            bos.flush();
-            bos.close();
-            is.close();
           }
           if ("stop".equals(s1)) {
             ends = true;
           }
-        }else{
+        } else {
           s1 = parms.inargs;
           System.out.println("simulated message: [" + s1 + "] length: " + s1.length());
-          process(s1,parms);
+          process(s1, parms);
           ends = true;
         }
       }
