@@ -4,7 +4,7 @@
  */
 package com.google.zxing.client.j2se;
 
-import com.beust.jcommander.JCommander;
+//import com.beust.jcommander.JCommander;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.pdf417.encoder.Compaction;
@@ -29,6 +29,7 @@ public class Parameters {
   public int pixperm;
   public String errorCorrectionLevel1;
   public double separation;
+  public double separationy;
   public String inargs;
   public int height2;
   public Map<EncodeHintType, Object> hints;
@@ -52,6 +53,7 @@ public class Parameters {
     String config_errorCorrectionLevel_s="";
     String config_pixperm_s="";
     String config_separation_s="";
+    String config_separationy_s="";
     String config_test_s="";
     String config_args_s="";
     try (BufferedReader reader1 = new BufferedReader(new FileReader(parameterName))){
@@ -61,6 +63,7 @@ public class Parameters {
       config_errorCorrectionLevel_s = reader1.readLine();
       config_pixperm_s = reader1.readLine();
       config_separation_s = reader1.readLine();
+      config_separationy_s = reader1.readLine();
       config_test_s = reader1.readLine();
       config_args_s = reader1.readLine();
       reader1.close();
@@ -74,6 +77,7 @@ public class Parameters {
       errorCorrectionLevel1 = config_errorCorrectionLevel_s;
       pixperm = Integer.parseInt(config_pixperm_s);
       separation = Double.parseDouble(config_separation_s);
+      separationy = Double.parseDouble(config_separationy_s);
       test = Integer.parseInt(config_test_s)==1;
       inargs = config_args_s;
     } catch (NumberFormatException e) {
