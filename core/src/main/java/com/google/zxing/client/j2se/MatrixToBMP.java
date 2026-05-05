@@ -251,7 +251,7 @@ public class MatrixToBMP {
         }
         even = !even;
       }
-      while (iy < endpointy + scaley) {
+      while (iy < endpointy + scaley-separationy) {
         for (int i4 = 0; i4 < mrowsize2 * 4; i4++) {
           outbmp[ifile] = a.a[i4];
           outbmpe[ifile] = ae.a[i4];
@@ -267,6 +267,19 @@ public class MatrixToBMP {
             outbmpoe[ifile] = ao.a[i4];
             outbmpoo[ifile] = a1.a[i4];
           }
+          ifile++;
+        }
+        iy++;
+      }
+      while (iy < endpointy + scaley) {
+        for (int i4 = 0; i4 < mrowsize2 *4; i4++){
+          outbmp[ifile] = a1.a[i4];
+          outbmpe[ifile] = a1.a[i4];
+          outbmpo[ifile] = a1.a[i4];
+          outbmpee[ifile] = a1.a[i4];
+          outbmpeo[ifile] = a1.a[i4];
+          outbmpoe[ifile] = a1.a[i4];
+          outbmpoo[ifile] = a1.a[i4];
           ifile++;
         }
         iy++;
